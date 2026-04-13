@@ -34,7 +34,7 @@
     }
 
     .app-shell {
-      width: min(1200px, 100%);
+      width: min(1280px, 100%);
       border-radius: 30px;
       padding: 4px;
       background: linear-gradient(
@@ -74,6 +74,14 @@
       border-radius: 26px;
       padding: 28px;
       min-height: 680px;
+    }
+
+    .top-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
     }
 
     .header {
@@ -204,6 +212,13 @@
       gap: 18px;
     }
 
+    .timer-visual-layout {
+      display: grid;
+      grid-template-columns: 1fr 42px;
+      gap: 14px;
+      align-items: stretch;
+    }
+
     .timer-display-wrap {
       background: var(--panel);
       border: 2px solid rgba(0, 0, 0, 0.14);
@@ -223,6 +238,63 @@
       font-weight: 800;
       letter-spacing: 0.04em;
       line-height: 1;
+    }
+
+    .timer-bar-outer {
+      position: relative;
+      border-radius: 22px;
+      border: 2px solid rgba(0, 0, 0, 0.14);
+      background: rgba(248, 247, 241, 0.9);
+      overflow: hidden;
+      min-height: 170px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+    }
+
+    .timer-bar-fill {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 100%;
+      background: linear-gradient(
+        180deg,
+        #79e5d9 0%,
+        #58d2df 35%,
+        #39b8df 65%,
+        #2b98d4 100%
+      );
+      transition: height 0.35s linear;
+    }
+
+    .timer-bar-fill.warning {
+      background: linear-gradient(
+        180deg,
+        #ffe38a 0%,
+        #ffc85a 50%,
+        #ff9f43 100%
+      );
+    }
+
+    .timer-bar-fill.danger {
+      background: linear-gradient(
+        180deg,
+        #ffb3a8 0%,
+        #ff7d73 55%,
+        #f04f4f 100%
+      );
+    }
+
+    .timer-bar-glass {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.24) 0%,
+        rgba(255, 255, 255, 0.08) 25%,
+        rgba(255, 255, 255, 0.02) 55%,
+        rgba(0, 0, 0, 0.04) 100%
+      );
+      pointer-events: none;
     }
 
     .timer-controls {
@@ -257,6 +329,113 @@
       animation: pulseAlert 0.9s ease-in-out 3;
     }
 
+    #learningQuestion {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    #activityInstructions {
+      font-size: 1.7rem;
+      line-height: 1.7;
+    }
+
+    #learningQuestion::placeholder,
+    #activityInstructions::placeholder {
+      font-size: 1.4rem;
+    }
+
+    body.presentation-mode {
+      padding: 10px;
+    }
+
+    body.presentation-mode .app-shell {
+      width: 100%;
+      max-width: none;
+    }
+
+    body.presentation-mode .app-frame {
+      min-height: calc(100vh - 20px);
+      padding: 20px;
+    }
+
+    body.presentation-mode .header {
+      margin-bottom: 16px;
+    }
+
+    body.presentation-mode .title {
+      font-size: clamp(2.4rem, 4vw, 4rem);
+    }
+
+    body.presentation-mode .subtitle {
+      font-size: 1.2rem;
+    }
+
+    body.presentation-mode .layout {
+      grid-template-columns: 2.4fr 1fr;
+      gap: 20px;
+      min-height: calc(100vh - 180px);
+    }
+
+    body.presentation-mode .panel {
+      padding: 22px;
+    }
+
+    body.presentation-mode .setup-controls,
+    body.presentation-mode .field label,
+    body.presentation-mode .helper-text,
+    body.presentation-mode .timer-controls {
+      display: none;
+    }
+
+    body.presentation-mode .panel h2 {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+    }
+
+    body.presentation-mode #learningQuestion {
+      font-size: clamp(2.6rem, 4vw, 4rem);
+      min-height: 110px;
+      padding: 22px 24px;
+    }
+
+    body.presentation-mode #activityInstructions {
+      font-size: clamp(2.1rem, 3vw, 3.1rem);
+      line-height: 1.5;
+      min-height: 420px;
+      padding: 24px;
+    }
+
+    body.presentation-mode #learningQuestion::placeholder,
+    body.presentation-mode #activityInstructions::placeholder {
+      font-size: inherit;
+    }
+
+    body.presentation-mode .timer-visual-layout {
+      grid-template-columns: 1fr 64px;
+      gap: 18px;
+    }
+
+    body.presentation-mode .timer-display-wrap {
+      padding: 26px 18px;
+    }
+
+    body.presentation-mode .timer-label {
+      font-size: 1.2rem;
+    }
+
+    body.presentation-mode .timer-display {
+      font-size: clamp(4rem, 9vw, 7rem);
+    }
+
+    body.presentation-mode .timer-bar-outer {
+      min-height: 280px;
+    }
+
+    body.presentation-mode .status-box {
+      font-size: 1.2rem;
+      min-height: 90px;
+    }
+
     @keyframes shimmerFlow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -287,12 +466,29 @@
       .activity-row {
         grid-template-columns: 1fr;
       }
+
+      .timer-visual-layout {
+        grid-template-columns: 1fr 34px;
+      }
+
+      body.presentation-mode .layout {
+        grid-template-columns: 1fr;
+      }
+
+      body.presentation-mode #activityInstructions {
+        min-height: 260px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="app-shell">
     <div class="app-frame">
+      <div class="top-toolbar setup-controls">
+        <button class="button" id="presentationToggle" type="button">Presentation Mode</button>
+        <button class="button secondary" id="fullscreenToggle" type="button">Full Screen</button>
+      </div>
+
       <header class="header">
         <h1 class="title">Classroom Do Now</h1>
         <p class="subtitle">Set the learning question, add the task, and run a visible classroom timer.</p>
@@ -332,9 +528,16 @@
         <aside class="panel timer-card">
           <h2>Timer</h2>
 
-          <div class="timer-display-wrap" id="timerDisplayWrap">
-            <div class="timer-label">Time Remaining</div>
-            <div class="timer-display" id="timerDisplay">05:00</div>
+          <div class="timer-visual-layout">
+            <div class="timer-display-wrap" id="timerDisplayWrap">
+              <div class="timer-label">Time Remaining</div>
+              <div class="timer-display" id="timerDisplay">05:00</div>
+            </div>
+
+            <div class="timer-bar-outer" aria-hidden="true">
+              <div class="timer-bar-fill" id="timerBarFill"></div>
+              <div class="timer-bar-glass"></div>
+            </div>
           </div>
 
           <div class="timer-controls">
@@ -381,11 +584,15 @@
     const timerDisplay = document.getElementById('timerDisplay');
     const timerDisplayWrap = document.getElementById('timerDisplayWrap');
     const timerStatus = document.getElementById('timerStatus');
+    const timerBarFill = document.getElementById('timerBarFill');
 
     const startTimerButton = document.getElementById('startTimer');
     const pauseTimerButton = document.getElementById('pauseTimer');
     const resetTimerButton = document.getElementById('resetTimer');
     const stopBeepButton = document.getElementById('stopBeep');
+
+    const presentationToggle = document.getElementById('presentationToggle');
+    const fullscreenToggle = document.getElementById('fullscreenToggle');
 
     let totalSeconds = parseInt(minutesInput.value, 10) * 60;
     let remainingSeconds = totalSeconds;
@@ -404,12 +611,26 @@
       timerDisplay.textContent = formatTime(remainingSeconds);
     }
 
+    function updateTimerBar() {
+      const ratio = totalSeconds > 0 ? remainingSeconds / totalSeconds : 0;
+      const percentage = Math.max(0, Math.min(100, ratio * 100));
+      timerBarFill.style.height = `${percentage}%`;
+
+      timerBarFill.classList.remove('warning', 'danger');
+      if (percentage <= 25) {
+        timerBarFill.classList.add('danger');
+      } else if (percentage <= 50) {
+        timerBarFill.classList.add('warning');
+      }
+    }
+
     function syncTimerFromInput() {
       const minutes = Math.max(1, Math.min(120, parseInt(minutesInput.value, 10) || 5));
       minutesInput.value = minutes;
       totalSeconds = minutes * 60;
       remainingSeconds = totalSeconds;
       updateDisplay();
+      updateTimerBar();
       timerStatus.textContent = `Timer set for ${minutes} minute${minutes === 1 ? '' : 's'}.`;
       timerDisplayWrap.classList.remove('flash');
     }
@@ -437,12 +658,14 @@
         if (remainingSeconds > 0) {
           remainingSeconds -= 1;
           updateDisplay();
+          updateTimerBar();
         }
 
         if (remainingSeconds <= 0) {
           stopTimerInterval();
           timerStatus.textContent = 'Time is up.';
           timerDisplayWrap.classList.add('flash');
+          updateTimerBar();
           startBeeping();
         }
       }, 1000);
@@ -513,7 +736,33 @@
       timerStatus.textContent = remainingSeconds === 0 ? 'Beep stopped. Time has ended.' : 'Beep stopped.';
     });
 
+    presentationToggle.addEventListener('click', () => {
+      document.body.classList.toggle('presentation-mode');
+      presentationToggle.textContent = document.body.classList.contains('presentation-mode')
+        ? 'Exit Presentation Mode'
+        : 'Presentation Mode';
+    });
+
+    fullscreenToggle.addEventListener('click', async () => {
+      if (!document.fullscreenElement) {
+        try {
+          await document.documentElement.requestFullscreen();
+          fullscreenToggle.textContent = 'Exit Full Screen';
+        } catch (error) {
+          timerStatus.textContent = 'Full screen was blocked by the browser.';
+        }
+      } else {
+        await document.exitFullscreen();
+        fullscreenToggle.textContent = 'Full Screen';
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      fullscreenToggle.textContent = document.fullscreenElement ? 'Exit Full Screen' : 'Full Screen';
+    });
+
     updateDisplay();
+    updateTimerBar();
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
