@@ -6,7 +6,6 @@
   <title>Classroom Do Now App</title>
   <style>
     :root {
-      --bg: #eef5f4;
       --panel: #f8f7f1;
       --text: #111111;
       --muted: #3d4b4a;
@@ -22,7 +21,7 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "Arial", "Verdana", "Trebuchet MS", sans-serif;
+      font-family: Arial, Verdana, "Trebuchet MS", sans-serif;
       background:
         radial-gradient(circle at top left, rgba(91, 211, 219, 0.22), transparent 30%),
         radial-gradient(circle at bottom right, rgba(39, 142, 214, 0.18), transparent 35%),
@@ -136,7 +135,7 @@
       padding: 14px 16px;
       font: inherit;
       outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     input[type="text"]:focus,
@@ -208,7 +207,7 @@
       border: 2px solid rgba(0, 0, 0, 0.14);
       border-radius: 22px;
       padding: 22px;
-      text-align: centre;
+      text-align: center;
     }
 
     .timer-label {
@@ -289,7 +288,7 @@
   </style>
 </head>
 <body>
-  <div class="app-shell" id="appShell">
+  <div class="app-shell">
     <div class="app-frame">
       <header class="header">
         <h1 class="title">Classroom Do Now</h1>
@@ -416,6 +415,7 @@
 
     function startTimer() {
       if (isRunning) return;
+
       if (remainingSeconds <= 0) {
         syncTimerFromInput();
       }
@@ -523,9 +523,9 @@
       });
 
       recognition.addEventListener('start', () => {
-        speechStatus.textContent = 'Listening… speak your learning question.';
+        speechStatus.textContent = 'Listening... speak your learning question.';
         dictateButton.disabled = true;
-        dictateButton.textContent = 'Listening…';
+        dictateButton.textContent = 'Listening...';
       });
 
       recognition.addEventListener('result', (event) => {
