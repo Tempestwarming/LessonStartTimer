@@ -151,7 +151,8 @@
       line-height: 1.5;
     }
 
-    .question-row {
+    .question-row,
+    .activity-row {
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 12px;
@@ -170,6 +171,7 @@
       color: #0c1b21;
       box-shadow: 0 10px 24px rgba(41, 137, 175, 0.28);
       transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      white-space: nowrap;
     }
 
     .button:hover,
@@ -281,7 +283,8 @@
         padding: 20px;
       }
 
-      .question-row {
+      .question-row,
+      .activity-row {
         grid-template-columns: 1fr;
       }
     }
@@ -308,18 +311,21 @@
                 placeholder="Type the learning question here"
                 aria-label="Learning question"
               />
-              <button class="button" id="dictateButton" type="button">🎤 Dictate</button>
+              <button class="button" id="dictateQuestionButton" type="button">🎤 Dictate</button>
             </div>
             <div class="helper-text" id="speechStatus">Speech input ready.</div>
           </div>
 
           <div class="field">
             <label for="activityInstructions">Activity Instructions</label>
-            <textarea
-              id="activityInstructions"
-              placeholder="Type the do now task or activity instructions here"
-              aria-label="Activity instructions"
-            ></textarea>
+            <div class="activity-row">
+              <textarea
+                id="activityInstructions"
+                placeholder="Type the do now task or activity instructions here"
+                aria-label="Activity instructions"
+              ></textarea>
+              <button class="button" id="dictateActivityButton" type="button">🎤 Dictate</button>
+            </div>
           </div>
         </section>
 
@@ -365,7 +371,10 @@
 
   <script>
     const learningQuestion = document.getElementById('learningQuestion');
-    const dictateButton = document.getElementById('dictateButton');
+    const activityInstructions = document.getElementById('activityInstructions');
+
+    const dictateQuestionButton = document.getElementById('dictateQuestionButton');
+    const dictateActivityButton = document.getElementById('dictateActivityButton');
     const speechStatus = document.getElementById('speechStatus');
 
     const minutesInput = document.getElementById('minutesInput');
@@ -514,24 +523,52 @@
       recognition.interimResults = false;
       recognition.maxAlternatives = 1;
 
-      dictateButton.addEventListener('click', () => {
+      let activeTarget = null;
+      let activeButton = null;
+      let activeLabel = '';
+
+      function startDictation(targetElement, buttonElement, labelText) {
+        activeTarget = targetElement;
+        activeButton = buttonElement;
+        activeLabel = labelText;
+
         try {
           recognition.start();
         } catch (error) {
           speechStatus.textContent = 'Speech input is already active.';
         }
+      }
+
+      dictateQuestionButton.addEventListener('click', () => {
+        startDictation(learningQuestion, dictateQuestionButton, 'learning question');
+      });
+
+      dictateActivityButton.addEventListener('click', () => {
+        startDictation(activityInstructions, dictateActivityButton, 'activity instructions');
       });
 
       recognition.addEventListener('start', () => {
-        speechStatus.textContent = 'Listening... speak your learning question.';
-        dictateButton.disabled = true;
-        dictateButton.textContent = 'Listening...';
+        speechStatus.textContent = `Listening for ${activeLabel}...`;
+        dictateQuestionButton.disabled = true;
+        dictateActivityButton.disabled = true;
+
+        if (activeButton) {
+          activeButton.textContent = 'Listening...';
+        }
       });
 
       recognition.addEventListener('result', (event) => {
         const transcript = event.results[0][0].transcript.trim();
-        learningQuestion.value = transcript;
-        speechStatus.textContent = 'Learning question captured.';
+
+        if (activeTarget) {
+          if (activeTarget.tagName.toLowerCase() === 'textarea' && activeTarget.value.trim() !== '') {
+            activeTarget.value += '\n' + transcript;
+          } else {
+            activeTarget.value = transcript;
+          }
+        }
+
+        speechStatus.textContent = `${activeLabel.charAt(0).toUpperCase() + activeLabel.slice(1)} captured.`;
       });
 
       recognition.addEventListener('error', (event) => {
@@ -539,11 +576,17 @@
       });
 
       recognition.addEventListener('end', () => {
-        dictateButton.disabled = false;
-        dictateButton.textContent = '🎤 Dictate';
+        dictateQuestionButton.disabled = false;
+        dictateActivityButton.disabled = false;
+        dictateQuestionButton.textContent = '🎤 Dictate';
+        dictateActivityButton.textContent = '🎤 Dictate';
+        activeTarget = null;
+        activeButton = null;
+        activeLabel = '';
       });
     } else {
-      dictateButton.disabled = true;
+      dictateQuestionButton.disabled = true;
+      dictateActivityButton.disabled = true;
       speechStatus.textContent = 'Speech input is not supported in this browser.';
     }
   </script>
