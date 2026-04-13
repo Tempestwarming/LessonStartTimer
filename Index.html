@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classroom Do Now App</title>
+  <style>
+    :root {
+      --bg: #eef5f4;
+      --panel: #f8f7f1;
+      --text: #111111;
+      --muted: #3d4b4a;
+      --border-dark: rgba(0, 0, 0, 0.14);
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Arial", "Verdana", "Trebuchet MS", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(91, 211, 219, 0.22), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(39, 142, 214, 0.18), transparent 35%),
+        linear-gradient(135deg, #dff3f1 0%, #edf7f8 45%, #dbeef7 100%);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app-shell {
+      width: min(1200px, 100%);
+      border-radius: 30px;
+      padding: 4px;
+      background: linear-gradient(
+        120deg,
+        #36c7d8,
+        #56e0d0,
+        #4ca9ff,
+        #54d6e6,
+        #36c7d8
+      );
+      background-size: 300% 300%;
+      animation: shimmerFlow 6s linear infinite;
+      box-shadow: 0 24px 60px rgba(14, 84, 110, 0.22);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        110deg,
+        transparent 20%,
+        rgba(255, 255, 255, 0.35) 35%,
+        transparent 50%
+      );
+      transform: translateX(-120%);
+      animation: shimmerSweep 4.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .app-frame {
+      position: relative;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(6px);
+      border-radius: 26px;
+      padding: 28px;
+      min-height: 680px;
+    }
+
+    .header {
+      margin-bottom: 20px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: clamp(1.8rem, 2.5vw, 2.6rem);
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+    }
+
+    .subtitle {
+      margin: 8px 0 0;
+      font-size: 1rem;
+      color: var(--muted);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel h2 {
+      margin: 0 0 14px;
+      font-size: 1.2rem;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      border: 2px solid rgba(0, 0, 0, 0.16);
+      border-radius: 16px;
+      background: var(--panel);
+      color: var(--text);
+      padding: 14px 16px;
+      font: inherit;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus {
+      border-color: #2aa7d7;
+      box-shadow: 0 0 0 4px rgba(42, 167, 215, 0.16);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 250px;
+      line-height: 1.5;
+    }
+
+    .question-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .button,
+    .timer-button {
+      border: none;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, #54d6e6, #2f9fd2);
+      color: #0c1b21;
+      box-shadow: 0 10px 24px rgba(41, 137, 175, 0.28);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    }
+
+    .button:hover,
+    .timer-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(41, 137, 175, 0.34);
+      filter: brightness(1.03);
+    }
+
+    .button:active,
+    .timer-button:active {
+      transform: translateY(0);
+    }
+
+    .button[disabled] {
+      cursor: not-allowed;
+      opacity: 0.6;
+      transform: none;
+    }
+
+    .helper-text {
+      margin-top: 8px;
+      font-size: 0.92rem;
+      color: var(--muted);
+      min-height: 1.2em;
+    }
+
+    .timer-card {
+      display: grid;
+      gap: 18px;
+    }
+
+    .timer-display-wrap {
+      background: var(--panel);
+      border: 2px solid rgba(0, 0, 0, 0.14);
+      border-radius: 22px;
+      padding: 22px;
+      text-align: centre;
+    }
+
+    .timer-label {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .timer-display {
+      font-size: clamp(2.4rem, 7vw, 4.6rem);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+
+    .timer-controls {
+      display: grid;
+      gap: 12px;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .secondary {
+      background: linear-gradient(135deg, #cfeef1, #9edbe8);
+    }
+
+    .danger {
+      background: linear-gradient(135deg, #ffe0d7, #ffbba6);
+    }
+
+    .status-box {
+      background: rgba(248, 247, 241, 0.95);
+      border: 2px dashed rgba(0, 0, 0, 0.15);
+      border-radius: 18px;
+      padding: 14px;
+      min-height: 74px;
+      line-height: 1.4;
+    }
+
+    .flash {
+      animation: pulseAlert 0.9s ease-in-out 3;
+    }
+
+    @keyframes shimmerFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes shimmerSweep {
+      0% { transform: translateX(-120%); }
+      55% { transform: translateX(120%); }
+      100% { transform: translateX(120%); }
+    }
+
+    @keyframes pulseAlert {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .app-frame {
+        padding: 20px;
+      }
+
+      .question-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+    <div class="app-frame">
+      <header class="header">
+        <h1 class="title">Classroom Do Now</h1>
+        <p class="subtitle">Set the learning question, add the task, and run a visible classroom timer.</p>
+      </header>
+
+      <main class="layout">
+        <section class="panel">
+          <h2>Lesson Setup</h2>
+
+          <div class="field">
+            <label for="learningQuestion">Learning Question</label>
+            <div class="question-row">
+              <input
+                type="text"
+                id="learningQuestion"
+                placeholder="Type the learning question here"
+                aria-label="Learning question"
+              />
+              <button class="button" id="dictateButton" type="button">🎤 Dictate</button>
+            </div>
+            <div class="helper-text" id="speechStatus">Speech input ready.</div>
+          </div>
+
+          <div class="field">
+            <label for="activityInstructions">Activity Instructions</label>
+            <textarea
+              id="activityInstructions"
+              placeholder="Type the do now task or activity instructions here"
+              aria-label="Activity instructions"
+            ></textarea>
+          </div>
+        </section>
+
+        <aside class="panel timer-card">
+          <h2>Timer</h2>
+
+          <div class="timer-display-wrap" id="timerDisplayWrap">
+            <div class="timer-label">Time Remaining</div>
+            <div class="timer-display" id="timerDisplay">05:00</div>
+          </div>
+
+          <div class="timer-controls">
+            <div class="field">
+              <label for="minutesInput">Minutes</label>
+              <input
+                type="number"
+                id="minutesInput"
+                min="1"
+                max="120"
+                value="5"
+                aria-label="Timer minutes"
+              />
+            </div>
+
+            <div class="button-row">
+              <button class="timer-button" id="startTimer" type="button">Start</button>
+              <button class="timer-button secondary" id="pauseTimer" type="button">Pause</button>
+            </div>
+
+            <div class="button-row">
+              <button class="timer-button secondary" id="resetTimer" type="button">Reset</button>
+              <button class="timer-button danger" id="stopBeep" type="button">Stop Beep</button>
+            </div>
+          </div>
+
+          <div class="status-box" id="timerStatus">
+            Timer is ready. Set the minutes and press start.
+          </div>
+        </aside>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const learningQuestion = document.getElementById('learningQuestion');
+    const dictateButton = document.getElementById('dictateButton');
+    const speechStatus = document.getElementById('speechStatus');
+
+    const minutesInput = document.getElementById('minutesInput');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerDisplayWrap = document.getElementById('timerDisplayWrap');
+    const timerStatus = document.getElementById('timerStatus');
+
+    const startTimerButton = document.getElementById('startTimer');
+    const pauseTimerButton = document.getElementById('pauseTimer');
+    const resetTimerButton = document.getElementById('resetTimer');
+    const stopBeepButton = document.getElementById('stopBeep');
+
+    let totalSeconds = parseInt(minutesInput.value, 10) * 60;
+    let remainingSeconds = totalSeconds;
+    let timerInterval = null;
+    let isRunning = false;
+    let audioContext = null;
+    let beepInterval = null;
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function updateDisplay() {
+      timerDisplay.textContent = formatTime(remainingSeconds);
+    }
+
+    function syncTimerFromInput() {
+      const minutes = Math.max(1, Math.min(120, parseInt(minutesInput.value, 10) || 5));
+      minutesInput.value = minutes;
+      totalSeconds = minutes * 60;
+      remainingSeconds = totalSeconds;
+      updateDisplay();
+      timerStatus.textContent = `Timer set for ${minutes} minute${minutes === 1 ? '' : 's'}.`;
+      timerDisplayWrap.classList.remove('flash');
+    }
+
+    function stopTimerInterval() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      isRunning = false;
+    }
+
+    function startTimer() {
+      if (isRunning) return;
+      if (remainingSeconds <= 0) {
+        syncTimerFromInput();
+      }
+
+      stopBeeping();
+      isRunning = true;
+      timerStatus.textContent = 'Timer is running.';
+
+      timerInterval = setInterval(() => {
+        if (remainingSeconds > 0) {
+          remainingSeconds -= 1;
+          updateDisplay();
+        }
+
+        if (remainingSeconds <= 0) {
+          stopTimerInterval();
+          timerStatus.textContent = 'Time is up.';
+          timerDisplayWrap.classList.add('flash');
+          startBeeping();
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      if (!isRunning) return;
+      stopTimerInterval();
+      timerStatus.textContent = 'Timer paused.';
+    }
+
+    function resetTimer() {
+      stopTimerInterval();
+      stopBeeping();
+      syncTimerFromInput();
+      timerStatus.textContent = 'Timer reset.';
+    }
+
+    function createBeep() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+      gainNode.gain.setValueAtTime(0.0001, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.28);
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + 0.3);
+    }
+
+    function startBeeping() {
+      stopBeeping();
+      createBeep();
+      beepInterval = setInterval(createBeep, 900);
+    }
+
+    function stopBeeping() {
+      if (beepInterval) {
+        clearInterval(beepInterval);
+        beepInterval = null;
+      }
+    }
+
+    minutesInput.addEventListener('input', () => {
+      if (!isRunning) {
+        syncTimerFromInput();
+      }
+    });
+
+    startTimerButton.addEventListener('click', startTimer);
+    pauseTimerButton.addEventListener('click', pauseTimer);
+    resetTimerButton.addEventListener('click', resetTimer);
+    stopBeepButton.addEventListener('click', () => {
+      stopBeeping();
+      timerStatus.textContent = remainingSeconds === 0 ? 'Beep stopped. Time has ended.' : 'Beep stopped.';
+    });
+
+    updateDisplay();
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-GB';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      dictateButton.addEventListener('click', () => {
+        try {
+          recognition.start();
+        } catch (error) {
+          speechStatus.textContent = 'Speech input is already active.';
+        }
+      });
+
+      recognition.addEventListener('start', () => {
+        speechStatus.textContent = 'Listening… speak your learning question.';
+        dictateButton.disabled = true;
+        dictateButton.textContent = 'Listening…';
+      });
+
+      recognition.addEventListener('result', (event) => {
+        const transcript = event.results[0][0].transcript.trim();
+        learningQuestion.value = transcript;
+        speechStatus.textContent = 'Learning question captured.';
+      });
+
+      recognition.addEventListener('error', (event) => {
+        speechStatus.textContent = `Speech input error: ${event.error}.`;
+      });
+
+      recognition.addEventListener('end', () => {
+        dictateButton.disabled = false;
+        dictateButton.textContent = '🎤 Dictate';
+      });
+    } else {
+      dictateButton.disabled = true;
+      speechStatus.textContent = 'Speech input is not supported in this browser.';
+    }
+  </script>
+</body>
+</html>
