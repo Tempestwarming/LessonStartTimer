@@ -22,15 +22,47 @@
       margin: 0;
       min-height: 100vh;
       font-family: Arial, Verdana, "Trebuchet MS", sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(91, 211, 219, 0.22), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(39, 142, 214, 0.18), transparent 35%),
-        linear-gradient(135deg, #dff3f1 0%, #edf7f8 45%, #dbeef7 100%);
       color: var(--text);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 24px;
+      overflow-x: hidden;
+      position: relative;
+      background:
+        radial-gradient(circle at top left, rgba(91, 211, 219, 0.20), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(39, 142, 214, 0.16), transparent 35%),
+        linear-gradient(135deg, #dff3f1 0%, #edf7f8 45%, #dbeef7 100%);
+    }
+
+    /* Ripple background layers */
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -12%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.65;
+      mix-blend-mode: screen;
+    }
+
+    body::before {
+      background:
+        radial-gradient(circle at 20% 30%, rgba(84, 214, 230, 0.30) 0%, rgba(84, 214, 230, 0.10) 12%, transparent 24%),
+        radial-gradient(circle at 72% 35%, rgba(54, 199, 216, 0.26) 0%, rgba(54, 199, 216, 0.08) 14%, transparent 28%),
+        radial-gradient(circle at 48% 76%, rgba(76, 169, 255, 0.24) 0%, rgba(76, 169, 255, 0.08) 13%, transparent 26%);
+      animation: rippleDriftOne 14s ease-in-out infinite alternate;
+      filter: blur(24px);
+    }
+
+    body::after {
+      background:
+        radial-gradient(circle at 30% 68%, rgba(86, 224, 208, 0.18) 0%, rgba(86, 224, 208, 0.06) 12%, transparent 22%),
+        radial-gradient(circle at 82% 72%, rgba(54, 199, 216, 0.20) 0%, rgba(54, 199, 216, 0.05) 12%, transparent 24%),
+        radial-gradient(circle at 62% 18%, rgba(76, 169, 255, 0.18) 0%, rgba(76, 169, 255, 0.05) 12%, transparent 24%);
+      animation: rippleDriftTwo 18s ease-in-out infinite alternate;
+      filter: blur(36px);
     }
 
     .app-shell {
@@ -50,6 +82,7 @@
       box-shadow: 0 24px 60px rgba(14, 84, 110, 0.22);
       position: relative;
       overflow: hidden;
+      z-index: 1;
     }
 
     .app-shell::before {
@@ -448,6 +481,30 @@
       100% { transform: translateX(120%); }
     }
 
+    @keyframes rippleDriftOne {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      50% {
+        transform: translate3d(2%, -1.5%, 0) scale(1.04);
+      }
+      100% {
+        transform: translate3d(-1.5%, 2%, 0) scale(1.02);
+      }
+    }
+
+    @keyframes rippleDriftTwo {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      50% {
+        transform: translate3d(-2%, 1%, 0) scale(1.05);
+      }
+      100% {
+        transform: translate3d(1.5%, -2%, 0) scale(1.03);
+      }
+    }
+
     @keyframes pulseAlert {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.02); }
@@ -486,7 +543,8 @@
     <div class="app-frame">
       <div class="top-toolbar setup-controls">
         <button class="button" id="presentationToggle" type="button">Presentation Mode</button>
-        <button class="button secondary" id="fullscreenToggle" type="button">Full Screen</button>
+        <button class="button secondary" id="fullscreenToggle" type="button">Enter Full Screen</button>
+        <button class="button danger" id="exitFullscreenButton" type="button">Exit Full Screen</button>
       </div>
 
       <header class="header">
@@ -593,6 +651,7 @@
 
     const presentationToggle = document.getElementById('presentationToggle');
     const fullscreenToggle = document.getElementById('fullscreenToggle');
+    const exitFullscreenButton = document.getElementById('exitFullscreenButton');
 
     let totalSeconds = parseInt(minutesInput.value, 10) * 60;
     let remainingSeconds = totalSeconds;
@@ -722,6 +781,33 @@
       }
     }
 
+    async function enterFullScreen() {
+      if (!document.fullscreenElement) {
+        try {
+          await document.documentElement.requestFullscreen();
+        } catch (error) {
+          timerStatus.textContent = 'Full screen was blocked by the browser.';
+        }
+      }
+    }
+
+    async function exitFullScreen() {
+      if (document.fullscreenElement) {
+        try {
+          await document.exitFullscreen();
+        } catch (error) {
+          timerStatus.textContent = 'Unable to exit full screen.';
+        }
+      }
+    }
+
+    function updateFullscreenButtons() {
+      const inFullscreen = !!document.fullscreenElement;
+      fullscreenToggle.textContent = inFullscreen ? 'Full Screen Active' : 'Enter Full Screen';
+      exitFullscreenButton.style.display = inFullscreen ? 'inline-block' : 'inline-block';
+      fullscreenToggle.disabled = inFullscreen;
+    }
+
     minutesInput.addEventListener('input', () => {
       if (!isRunning) {
         syncTimerFromInput();
@@ -743,26 +829,14 @@
         : 'Presentation Mode';
     });
 
-    fullscreenToggle.addEventListener('click', async () => {
-      if (!document.fullscreenElement) {
-        try {
-          await document.documentElement.requestFullscreen();
-          fullscreenToggle.textContent = 'Exit Full Screen';
-        } catch (error) {
-          timerStatus.textContent = 'Full screen was blocked by the browser.';
-        }
-      } else {
-        await document.exitFullscreen();
-        fullscreenToggle.textContent = 'Full Screen';
-      }
-    });
+    fullscreenToggle.addEventListener('click', enterFullScreen);
+    exitFullscreenButton.addEventListener('click', exitFullScreen);
 
-    document.addEventListener('fullscreenchange', () => {
-      fullscreenToggle.textContent = document.fullscreenElement ? 'Exit Full Screen' : 'Full Screen';
-    });
+    document.addEventListener('fullscreenchange', updateFullscreenButtons);
 
     updateDisplay();
     updateTimerBar();
+    updateFullscreenButtons();
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
