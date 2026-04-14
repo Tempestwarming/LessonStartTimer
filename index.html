@@ -73,7 +73,7 @@
     }
 
     .app-shell {
-      width: min(1400px, 100%);
+      width: min(1500px, 100%);
       min-height: calc(100vh - 20px);
       border-radius: 30px;
       padding: 4px;
@@ -118,24 +118,17 @@
       padding: 18px;
       min-height: calc(100vh - 28px);
       display: grid;
-      grid-template-rows: auto auto 1fr auto;
+      grid-template-rows: auto 1fr auto;
       gap: 14px;
     }
 
-    .top-toolbar {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      align-items: stretch;
-    }
-
     .date-time-bar {
-      background: rgba(255, 255, 255, 0.78);
+      background: rgba(255, 255, 255, 0.82);
       border: 1px solid rgba(0, 0, 0, 0.12);
-      border-radius: 18px;
-      padding: 14px 18px;
+      border-radius: 20px;
+      padding: 16px 22px;
       text-align: center;
-      font-size: 1.35rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: #111111;
       box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
@@ -143,7 +136,7 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 2.15fr 1fr;
+      grid-template-columns: 2.4fr 1fr;
       gap: 20px;
       align-items: stretch;
       min-height: 0;
@@ -151,6 +144,7 @@
 
     .left-column {
       display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 18px;
       min-height: 0;
     }
@@ -215,6 +209,7 @@
       grid-template-columns: 1fr auto;
       gap: 12px;
       align-items: stretch;
+      height: 100%;
     }
 
     .button,
@@ -231,7 +226,6 @@
       color: #0c1b21;
       box-shadow: 0 10px 24px rgba(41, 137, 175, 0.28);
       width: 100%;
-      height: 100%;
       min-height: 56px;
     }
 
@@ -263,23 +257,9 @@
       color: #ffffff;
     }
 
-    .memory-button {
-      background: linear-gradient(135deg, #f6e7c7, #eec580);
-      color: #4a3512;
-    }
-
-    .silent-on {
-      background: linear-gradient(135deg, #d9f7e4, #8ed3a5);
-      color: #183826;
-    }
-
-    .silent-off {
-      background: linear-gradient(135deg, #ffe3e3, #f4a3a3);
-      color: #4f1d1d;
-    }
-
     .timer-card {
       display: grid;
+      grid-template-rows: auto 1fr auto auto auto;
       gap: 16px;
       min-height: 0;
     }
@@ -295,19 +275,29 @@
       margin-bottom: 10px;
     }
 
-    .timer-visual-layout {
+    /* Full-height timer visual */
+    .timer-main {
       display: grid;
-      grid-template-columns: 1fr 48px;
+      grid-template-columns: 1fr 70px;
       gap: 16px;
+      min-height: 0;
+      height: 100%;
       align-items: stretch;
+    }
+
+    .timer-content {
+      display: grid;
+      grid-template-rows: auto auto auto 1fr;
+      gap: 14px;
+      min-height: 0;
     }
 
     .timer-display-wrap {
       background: var(--panel);
       border: 2px solid rgba(0, 0, 0, 0.14);
       border-radius: 22px;
-      padding: 24px;
-      text-align: center;
+      padding: 22px;
+      text-align: centre;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
@@ -319,13 +309,15 @@
       font-size: 0.98rem;
       color: var(--muted);
       margin-bottom: 8px;
+      text-align: center;
     }
 
     .timer-display {
-      font-size: clamp(2.8rem, 7vw, 4.9rem);
+      font-size: clamp(2.8rem, 7vw, 5rem);
       font-weight: 800;
       letter-spacing: 0.04em;
       line-height: 1;
+      text-align: center;
     }
 
     .timer-bar-outer {
@@ -334,7 +326,8 @@
       border: 2px solid rgba(0, 0, 0, 0.14);
       background: rgba(248, 247, 241, 0.9);
       overflow: hidden;
-      min-height: 180px;
+      min-height: 100%;
+      height: 100%;
       box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
     }
 
@@ -412,7 +405,7 @@
 
     .shortcut-bar {
       display: grid;
-      grid-template-columns: repeat(8, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 10px;
       align-items: stretch;
     }
@@ -451,15 +444,15 @@
       font-size: 2.5rem;
       font-weight: 700;
       line-height: 1.25;
-      min-height: min(28vh, 230px);
-      max-height: 34vh;
+      min-height: 100%;
+      height: 100%;
     }
 
     #activityInstructions {
       font-size: 2.2rem;
       line-height: 1.45;
-      min-height: min(24vh, 210px);
-      max-height: 28vh;
+      min-height: 100%;
+      height: 100%;
     }
 
     #learningQuestion::placeholder,
@@ -513,13 +506,13 @@
 
     @media (max-width: 1200px) {
       .shortcut-bar {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
       }
     }
 
-    @media (max-width: 1100px) {
-      .top-toolbar {
-        grid-template-columns: repeat(4, 1fr);
+    @media (max-width: 1050px) {
+      .left-column {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -533,7 +526,7 @@
       }
 
       .top-toolbar {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
       }
 
       .layout {
@@ -545,7 +538,7 @@
         grid-template-columns: 1fr;
       }
 
-      .timer-visual-layout {
+      .timer-main {
         grid-template-columns: 1fr 36px;
       }
 
@@ -555,14 +548,10 @@
 
       #learningQuestion {
         font-size: 1.9rem;
-        min-height: 170px;
-        max-height: 240px;
       }
 
       #activityInstructions {
         font-size: 1.7rem;
-        min-height: 160px;
-        max-height: 220px;
       }
     }
   </style>
@@ -570,13 +559,6 @@
 <body>
   <div class="app-shell">
     <div class="app-frame">
-      <div class="top-toolbar">
-        <button class="button secondary" id="fullscreenToggle" type="button">Enter Full Screen</button>
-        <button class="button danger" id="exitFullscreenButton" type="button">Exit Full Screen</button>
-        <button class="button silent-off" id="silentToggle" type="button">Sound On</button>
-        <button class="button memory-button" id="resetMemoryButton" type="button">Reset Memory</button>
-      </div>
-
       <div class="date-time-bar" id="dateTimeBar">Tuesday the 14th of April 2026 • 09:00</div>
 
       <main class="layout">
@@ -613,10 +595,50 @@
         <aside class="panel timer-card">
           <h2>Timer</h2>
 
-          <div class="timer-visual-layout">
-            <div class="timer-display-wrap" id="timerDisplayWrap">
-              <div class="timer-label">Time Remaining</div>
-              <div class="timer-display" id="timerDisplay">05:00</div>
+          <div class="timer-main">
+            <div class="timer-content">
+              <div class="timer-display-wrap" id="timerDisplayWrap">
+                <div class="timer-label">Time Remaining</div>
+                <div class="timer-display" id="timerDisplay">05:00</div>
+              </div>
+
+              <div class="timer-controls">
+                <div class="field">
+                  <label for="minutesInput">Minutes</label>
+                  <input
+                    type="number"
+                    id="minutesInput"
+                    min="1"
+                    max="120"
+                    value="5"
+                    aria-label="Timer minutes"
+                  />
+                </div>
+
+                <div>
+                  <div class="mini-section-title">Quick Presets</div>
+                  <div class="preset-row four">
+                    <button class="button secondary preset-btn" data-minutes="2" type="button">2m</button>
+                    <button class="button secondary preset-btn" data-minutes="5" type="button">5m</button>
+                    <button class="button secondary preset-btn" data-minutes="10" type="button">10m</button>
+                    <button class="button secondary preset-btn" data-minutes="15" type="button">15m</button>
+                  </div>
+                </div>
+
+                <div class="button-row">
+                  <button class="timer-button" id="startTimer" type="button">Start</button>
+                  <button class="timer-button secondary" id="pauseTimer" type="button">Pause</button>
+                </div>
+
+                <div class="button-row">
+                  <button class="timer-button secondary" id="resetTimer" type="button">Reset</button>
+                  <button class="timer-button danger" id="stopBeep" type="button">Stop Beep</button>
+                </div>
+              </div>
+
+              <div class="status-box" id="timerStatus">
+                Timer is ready. Set the minutes and press start.
+              </div>
             </div>
 
             <div class="timer-bar-outer" aria-hidden="true">
@@ -624,62 +646,22 @@
               <div class="timer-bar-glass"></div>
             </div>
           </div>
-
-          <div class="timer-controls">
-            <div class="field">
-              <label for="minutesInput">Minutes</label>
-              <input
-                type="number"
-                id="minutesInput"
-                min="1"
-                max="120"
-                value="5"
-                aria-label="Timer minutes"
-              />
-            </div>
-
-            <div>
-              <div class="mini-section-title">Quick Presets</div>
-              <div class="preset-row four">
-                <button class="button secondary preset-btn" data-minutes="2" type="button">2m</button>
-                <button class="button secondary preset-btn" data-minutes="5" type="button">5m</button>
-                <button class="button secondary preset-btn" data-minutes="10" type="button">10m</button>
-                <button class="button secondary preset-btn" data-minutes="15" type="button">15m</button>
-              </div>
-            </div>
-
-            <div class="button-row">
-              <button class="timer-button" id="startTimer" type="button">Start</button>
-              <button class="timer-button secondary" id="pauseTimer" type="button">Pause</button>
-            </div>
-
-            <div class="button-row">
-              <button class="timer-button secondary" id="resetTimer" type="button">Reset</button>
-              <button class="timer-button danger" id="stopBeep" type="button">Stop Beep</button>
-            </div>
-          </div>
-
-          <div class="status-box" id="timerStatus">
-            Timer is ready. Set the minutes and press start.
-          </div>
         </aside>
       </main>
 
       <div class="shortcut-bar">
-        <div class="shortcut-item"><span class="kbd">F</span><span>Full screen</span></div>
-        <div class="shortcut-item"><span class="kbd">X</span><span>Exit full</span></div>
         <div class="shortcut-item"><span class="kbd">Space</span><span>Start / Pause</span></div>
         <div class="shortcut-item"><span class="kbd">R</span><span>Reset timer</span></div>
-        <div class="shortcut-item"><span class="kbd">S</span><span>Toggle sound</span></div>
         <div class="shortcut-item"><span class="kbd">2</span><span>2 mins</span></div>
         <div class="shortcut-item"><span class="kbd">5</span><span>5 mins</span></div>
         <div class="shortcut-item"><span class="kbd">1</span><span>10 mins</span></div>
+        <div class="shortcut-item"><span class="kbd">F</span><span>Full screen</span></div>
       </div>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = "do_now_app_state_v3";
+    const STORAGE_KEY = "do_now_app_state_v4";
 
     const learningQuestion = document.getElementById('learningQuestion');
     const activityInstructions = document.getElementById('activityInstructions');
@@ -698,11 +680,6 @@
     const resetTimerButton = document.getElementById('resetTimer');
     const stopBeepButton = document.getElementById('stopBeep');
 
-    const fullscreenToggle = document.getElementById('fullscreenToggle');
-    const exitFullscreenButton = document.getElementById('exitFullscreenButton');
-    const silentToggle = document.getElementById('silentToggle');
-    const resetMemoryButton = document.getElementById('resetMemoryButton');
-
     const dateTimeBar = document.getElementById('dateTimeBar');
     const presetButtons = document.querySelectorAll('.preset-btn');
 
@@ -712,7 +689,6 @@
     let isRunning = false;
     let audioContext = null;
     let beepInterval = null;
-    let isSilent = false;
     let oneMinuteWarningPlayed = false;
     let lastTenSecondPlayed = new Set();
 
@@ -722,8 +698,7 @@
         activityInstructions: activityInstructions.value,
         minutesInput: minutesInput.value,
         remainingSeconds,
-        totalSeconds,
-        isSilent
+        totalSeconds
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
@@ -745,23 +720,13 @@
         }
         if (typeof state.totalSeconds === 'number' && state.totalSeconds > 0) {
           totalSeconds = state.totalSeconds;
-        } else {
-          totalSeconds = Math.max(1, parseInt(minutesInput.value, 10) || 5) * 60;
         }
         if (typeof state.remainingSeconds === 'number' && state.remainingSeconds >= 0) {
           remainingSeconds = state.remainingSeconds;
         } else {
           remainingSeconds = totalSeconds;
         }
-        if (typeof state.isSilent === 'boolean') {
-          isSilent = state.isSilent;
-        }
       } catch (error) {}
-    }
-
-    function resetMemory() {
-      localStorage.removeItem(STORAGE_KEY);
-      location.reload();
     }
 
     function getOrdinal(day) {
@@ -819,12 +784,6 @@
       }
     }
 
-    function updateSilentButton() {
-      silentToggle.textContent = isSilent ? 'Sound Off' : 'Sound On';
-      silentToggle.classList.toggle('silent-on', isSilent);
-      silentToggle.classList.toggle('silent-off', !isSilent);
-    }
-
     function syncTimerFromInput() {
       const minutes = Math.max(1, Math.min(120, parseInt(minutesInput.value, 10) || 5));
       minutesInput.value = minutes;
@@ -859,7 +818,6 @@
     }
 
     function playTone(frequency, duration, volume = 0.18, type = 'sine') {
-      if (isSilent) return;
       ensureAudioContext();
 
       const oscillator = audioContext.createOscillator();
@@ -879,24 +837,20 @@
     }
 
     function playOneMinuteWarning() {
-      if (isSilent) return;
       playTone(740, 0.18, 0.12, 'triangle');
       setTimeout(() => playTone(740, 0.18, 0.12, 'triangle'), 260);
     }
 
     function playLastTenTick() {
-      if (isSilent) return;
       playTone(980, 0.08, 0.10, 'square');
     }
 
     function createEndAlarmBeep() {
-      if (isSilent) return;
       playTone(880, 0.24, 0.2, 'sine');
     }
 
     function startBeeping() {
       stopBeeping();
-      if (isSilent) return;
       createEndAlarmBeep();
       beepInterval = setInterval(createEndAlarmBeep, 900);
     }
@@ -979,21 +933,6 @@
       }
     }
 
-    async function exitFullScreen() {
-      if (document.fullscreenElement) {
-        try {
-          await document.exitFullscreen();
-        } catch (error) {
-          timerStatus.textContent = 'Unable to exit full screen.';
-        }
-      }
-    }
-
-    function updateFullscreenButtons() {
-      const inFullscreen = !!document.fullscreenElement;
-      fullscreenToggle.disabled = inFullscreen;
-    }
-
     function getQuestionConfig() {
       return { max: 48, min: 18, step: 1, lineHeight: 1.22 };
     }
@@ -1024,14 +963,6 @@
       timerStatus.textContent = `Timer preset applied: ${minutes} minute${minutes === 1 ? '' : 's'}.`;
     }
 
-    function toggleSound() {
-      isSilent = !isSilent;
-      updateSilentButton();
-      saveState();
-      timerStatus.textContent = isSilent ? 'Sound has been turned off.' : 'Sound has been turned on.';
-      if (isSilent) stopBeeping();
-    }
-
     function handleKeyboardShortcuts(event) {
       const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
       const isTyping = activeTag === 'textarea' || activeTag === 'input';
@@ -1046,13 +977,11 @@
       if (isTyping && !event.altKey && !event.ctrlKey && !event.metaKey) return;
 
       const key = event.key.toLowerCase();
-      if (key === 'f') enterFullScreen();
-      if (key === 'x') exitFullScreen();
       if (key === 'r') resetTimer();
-      if (key === 's') toggleSound();
       if (key === '2') applyPreset(2);
       if (key === '5') applyPreset(5);
       if (key === '1') applyPreset(10);
+      if (key === 'f') enterFullScreen();
     }
 
     minutesInput.addEventListener('input', () => {
@@ -1085,22 +1014,13 @@
       timerStatus.textContent = remainingSeconds === 0 ? 'Beep stopped. Time has ended.' : 'Beep stopped.';
     });
 
-    fullscreenToggle.addEventListener('click', enterFullScreen);
-    exitFullscreenButton.addEventListener('click', exitFullScreen);
-    silentToggle.addEventListener('click', toggleSound);
-    resetMemoryButton.addEventListener('click', resetMemory);
-
-    document.addEventListener('fullscreenchange', updateFullscreenButtons);
-
     loadState();
-    updateSilentButton();
     updateDateTime();
     setInterval(updateDateTime, 1000);
 
     updateDisplay();
     updateTimerBar();
     updateLastThirtyWarning();
-    updateFullscreenButtons();
 
     requestAnimationFrame(() => {
       refreshAutoFit();
