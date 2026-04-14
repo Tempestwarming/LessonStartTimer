@@ -115,14 +115,17 @@
       background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(6px);
       border-radius: 26px;
-      padding: 18px;
+      padding: 16px;
       min-height: calc(100vh - 28px);
       display: grid;
+      grid-template-columns: 1fr 52px;
       grid-template-rows: auto 1fr auto auto;
-      gap: 14px;
+      gap: 14px 14px;
     }
 
     .date-time-bar {
+      grid-column: 1;
+      grid-row: 1;
       background: rgba(255, 255, 255, 0.82);
       border: 1px solid rgba(0, 0, 0, 0.12);
       border-radius: 20px;
@@ -135,8 +138,10 @@
     }
 
     .main-layout {
+      grid-column: 1;
+      grid-row: 2;
       display: grid;
-      grid-template-columns: 1fr 1fr 72px;
+      grid-template-columns: 1fr 1fr;
       gap: 18px;
       min-height: 0;
       align-items: stretch;
@@ -154,13 +159,56 @@
     .field {
       margin-bottom: 0;
       height: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
+    }
+
+    .field-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
 
     label {
       display: block;
-      font-size: 1rem;
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .dictate-small {
+      border: none;
+      border-radius: 14px;
+      padding: 10px 14px;
+      min-width: 112px;
+      min-height: 44px;
+      font: inherit;
       font-weight: 700;
-      margin-bottom: 8px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #54d6e6, #2f9fd2);
+      color: #0c1b21;
+      box-shadow: 0 10px 24px rgba(41, 137, 175, 0.22);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .dictate-small:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(41, 137, 175, 0.32);
+      filter: brightness(1.03);
+    }
+
+    .dictate-small:active {
+      transform: translateY(0);
+    }
+
+    .dictate-small[disabled] {
+      cursor: not-allowed;
+      opacity: 0.65;
+      transform: none;
     }
 
     textarea,
@@ -190,69 +238,15 @@
       min-height: 100%;
     }
 
-    .question-row,
-    .activity-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      align-items: stretch;
-      height: 100%;
-    }
-
-    .button,
-    .timer-button {
-      border: none;
-      border-radius: 16px;
-      font: inherit;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
-      white-space: nowrap;
-      padding: 14px 18px;
-      background: linear-gradient(135deg, #54d6e6, #2f9fd2);
-      color: #0c1b21;
-      box-shadow: 0 10px 24px rgba(41, 137, 175, 0.28);
-      width: 100%;
-      min-height: 56px;
-    }
-
-    .button:hover,
-    .timer-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 28px rgba(41, 137, 175, 0.34);
-      filter: brightness(1.03);
-    }
-
-    .button:active,
-    .timer-button:active {
-      transform: translateY(0);
-    }
-
-    .button[disabled],
-    .timer-button[disabled] {
-      cursor: not-allowed;
-      opacity: 0.65;
-      transform: none;
-    }
-
-    .secondary {
-      background: linear-gradient(135deg, #cfeef1, #9edbe8);
-    }
-
-    .danger {
-      background: linear-gradient(135deg, #d86464, #8f1f2d);
-      color: #ffffff;
-    }
-
     #learningQuestion {
-      font-size: 2.5rem;
+      font-size: 2.45rem;
       font-weight: 700;
-      line-height: 1.25;
+      line-height: 1.24;
     }
 
     #activityInstructions {
-      font-size: 2.2rem;
-      line-height: 1.45;
+      font-size: 2.15rem;
+      line-height: 1.42;
     }
 
     #learningQuestion::placeholder,
@@ -261,6 +255,8 @@
     }
 
     .timer-bar-outer {
+      grid-column: 2;
+      grid-row: 1 / 5;
       position: relative;
       border-radius: 22px;
       border: 2px solid rgba(0, 0, 0, 0.14);
@@ -319,15 +315,17 @@
     }
 
     .bottom-timer-panel {
+      grid-column: 1;
+      grid-row: 3;
       background: rgba(255, 255, 255, 0.72);
       border: 1px solid var(--border-dark);
       border-radius: var(--radius);
       padding: 18px;
       box-shadow: var(--shadow);
       display: grid;
-      grid-template-columns: 1.3fr 1fr 1.3fr;
+      grid-template-columns: 1.2fr 1.4fr 1fr;
       gap: 16px;
-      align-items: centre;
+      align-items: center;
     }
 
     .timer-display-wrap {
@@ -350,7 +348,7 @@
     }
 
     .timer-display {
-      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      font-size: clamp(3.2rem, 7vw, 5.9rem);
       font-weight: 800;
       letter-spacing: 0.04em;
       line-height: 1;
@@ -362,33 +360,81 @@
       align-content: center;
     }
 
-    .preset-row,
-    .button-row {
+    .preset-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 10px;
     }
 
     .control-row {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
       gap: 10px;
+    }
+
+    .button,
+    .timer-button {
+      border: none;
+      border-radius: 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      white-space: nowrap;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #54d6e6, #2f9fd2);
+      color: #0c1b21;
+      box-shadow: 0 10px 24px rgba(41, 137, 175, 0.28);
+      width: 100%;
+      min-height: 56px;
+    }
+
+    .button:hover,
+    .timer-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(41, 137, 175, 0.34);
+      filter: brightness(1.03);
+    }
+
+    .button:active,
+    .timer-button:active {
+      transform: translateY(0);
+    }
+
+    .button[disabled],
+    .timer-button[disabled] {
+      cursor: not-allowed;
+      opacity: 0.65;
+      transform: none;
+    }
+
+    .secondary {
+      background: linear-gradient(135deg, #cfeef1, #9edbe8);
+    }
+
+    .danger {
+      background: linear-gradient(135deg, #e15a5a, #b4202f, #7f1321);
+      color: #ffffff;
     }
 
     .status-box {
       background: rgba(248, 247, 241, 0.95);
       border: 2px dashed rgba(0, 0, 0, 0.15);
       border-radius: 18px;
-      padding: 14px;
-      line-height: 1.4;
-      min-height: 74px;
+      padding: 10px 12px;
+      line-height: 1.2;
+      min-height: 58px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
     }
 
     .shortcut-bar {
+      grid-column: 1;
+      grid-row: 4;
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: 10px;
@@ -469,27 +515,50 @@
       }
     }
 
-    @media (max-width: 1200px) {
-      .shortcut-bar {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
+    @media (max-width: 1250px) {
       .bottom-timer-panel {
         grid-template-columns: 1fr;
       }
+
+      .shortcut-bar {
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
 
-    @media (max-width: 950px) {
+    @media (max-width: 1000px) {
       .main-layout {
         grid-template-columns: 1fr;
       }
 
+      .app-frame {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr auto auto;
+      }
+
+      .date-time-bar {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .main-layout {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
       .timer-bar-outer {
+        grid-column: 1;
+        grid-row: 3;
         min-height: 160px;
       }
 
+      .bottom-timer-panel {
+        grid-column: 1;
+        grid-row: 4;
+      }
+
       .shortcut-bar {
-        grid-template-columns: 1fr 1fr;
+        grid-column: 1;
+        grid-row: 5;
       }
     }
 
@@ -498,22 +567,20 @@
         padding: 8px;
       }
 
-      .app-frame {
-        min-height: calc(100vh - 16px);
-      }
-
-      .main-layout {
-        grid-template-columns: 1fr;
-      }
-
       .question-row,
       .activity-row {
         grid-template-columns: 1fr;
       }
 
-      .preset-row,
-      .button-row,
+      .preset-row {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+
       .control-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .shortcut-bar {
         grid-template-columns: 1fr 1fr;
       }
 
@@ -535,37 +602,37 @@
       <main class="main-layout">
         <section class="panel">
           <div class="field">
-            <label for="learningQuestion">Learning Question</label>
-            <div class="question-row">
-              <textarea
-                id="learningQuestion"
-                placeholder="Type the learning question here"
-                aria-label="Learning question"
-              ></textarea>
-              <button class="button" id="dictateQuestionButton" type="button">🎤 Dictate</button>
+            <div class="field-top">
+              <label for="learningQuestion">Learning Question</label>
+              <button class="dictate-small" id="dictateQuestionButton" type="button">🎤 Dictate</button>
             </div>
+            <textarea
+              id="learningQuestion"
+              placeholder="Type the learning question here"
+              aria-label="Learning question"
+            ></textarea>
           </div>
         </section>
 
         <section class="panel">
           <div class="field">
-            <label for="activityInstructions">Activity Instructions</label>
-            <div class="activity-row">
-              <textarea
-                id="activityInstructions"
-                placeholder="Type the do now task or activity instructions here"
-                aria-label="Activity instructions"
-              ></textarea>
-              <button class="button" id="dictateActivityButton" type="button">🎤 Dictate</button>
+            <div class="field-top">
+              <label for="activityInstructions">Activity Instructions</label>
+              <button class="dictate-small" id="dictateActivityButton" type="button">🎤 Dictate</button>
             </div>
+            <textarea
+              id="activityInstructions"
+              placeholder="Type the do now task or activity instructions here"
+              aria-label="Activity instructions"
+            ></textarea>
           </div>
         </section>
-
-        <aside class="timer-bar-outer" aria-hidden="true">
-          <div class="timer-bar-fill" id="timerBarFill"></div>
-          <div class="timer-bar-glass"></div>
-        </aside>
       </main>
+
+      <aside class="timer-bar-outer" aria-hidden="true">
+        <div class="timer-bar-fill" id="timerBarFill"></div>
+        <div class="timer-bar-glass"></div>
+      </aside>
 
       <section class="bottom-timer-panel">
         <div class="timer-display-wrap" id="timerDisplayWrap">
@@ -587,6 +654,7 @@
           </div>
 
           <div class="preset-row">
+            <button class="button secondary preset-btn" data-minutes="1" type="button">1m</button>
             <button class="button secondary preset-btn" data-minutes="2" type="button">2m</button>
             <button class="button secondary preset-btn" data-minutes="5" type="button">5m</button>
             <button class="button secondary preset-btn" data-minutes="10" type="button">10m</button>
@@ -597,6 +665,7 @@
             <button class="timer-button" id="startTimer" type="button">Start</button>
             <button class="timer-button secondary" id="pauseTimer" type="button">Pause</button>
             <button class="timer-button secondary" id="resetTimer" type="button">Reset</button>
+            <button class="timer-button danger" id="stopBeep" type="button">Stop</button>
           </div>
         </div>
 
@@ -608,16 +677,16 @@
       <div class="shortcut-bar">
         <div class="shortcut-item"><span class="kbd">Space</span><span>Start / Pause</span></div>
         <div class="shortcut-item"><span class="kbd">R</span><span>Reset timer</span></div>
+        <div class="shortcut-item"><span class="kbd">1</span><span>1 min</span></div>
         <div class="shortcut-item"><span class="kbd">2</span><span>2 mins</span></div>
         <div class="shortcut-item"><span class="kbd">5</span><span>5 mins</span></div>
-        <div class="shortcut-item"><span class="kbd">1</span><span>10 mins</span></div>
         <div class="shortcut-item"><span class="kbd">F</span><span>Full screen</span></div>
       </div>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = "do_now_app_state_v5";
+    const STORAGE_KEY = "do_now_app_state_v6";
 
     const learningQuestion = document.getElementById('learningQuestion');
     const activityInstructions = document.getElementById('activityInstructions');
@@ -634,6 +703,7 @@
     const startTimerButton = document.getElementById('startTimer');
     const pauseTimerButton = document.getElementById('pauseTimer');
     const resetTimerButton = document.getElementById('resetTimer');
+    const stopBeepButton = document.getElementById('stopBeep');
 
     const dateTimeBar = document.getElementById('dateTimeBar');
     const presetButtons = document.querySelectorAll('.preset-btn');
@@ -921,9 +991,9 @@
 
       const key = event.key.toLowerCase();
       if (key === 'r') resetTimer();
+      if (key === '1') applyPreset(1);
       if (key === '2') applyPreset(2);
       if (key === '5') applyPreset(5);
-      if (key === '1') applyPreset(10);
       if (key === 'f') enterFullScreen();
     }
 
@@ -953,6 +1023,11 @@
     startTimerButton.addEventListener('click', startTimer);
     pauseTimerButton.addEventListener('click', pauseTimer);
     resetTimerButton.addEventListener('click', resetTimer);
+    stopBeepButton.addEventListener('click', () => {
+      stopBeeping();
+      stopTimerInterval();
+      timerStatus.textContent = remainingSeconds === 0 ? 'Alarm stopped.' : 'Timer stopped.';
+    });
 
     loadState();
     updateDateTime();
