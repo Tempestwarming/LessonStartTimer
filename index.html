@@ -12,6 +12,7 @@
       --border-dark: rgba(0, 0, 0, 0.14);
       --shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
       --radius: 24px;
+      --storage-key: "do_now_app_state_v2";
     }
 
     * {
@@ -68,7 +69,7 @@
     }
 
     .app-shell {
-      width: min(1320px, 100%);
+      width: min(1400px, 100%);
       border-radius: 30px;
       padding: 4px;
       background: linear-gradient(
@@ -110,12 +111,12 @@
       backdrop-filter: blur(6px);
       border-radius: 26px;
       padding: 24px;
-      min-height: 700px;
+      min-height: 720px;
     }
 
     .top-toolbar {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 10px;
       margin-bottom: 18px;
       align-items: stretch;
@@ -208,32 +209,51 @@
     }
 
     .button,
-    .timer-button {
+    .timer-button,
+    .mini-button {
       border: none;
       border-radius: 16px;
-      padding: 14px 18px;
       font: inherit;
       font-weight: 700;
       cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .button,
+    .timer-button {
+      padding: 14px 18px;
       background: linear-gradient(135deg, #54d6e6, #2f9fd2);
       color: #0c1b21;
       box-shadow: 0 10px 24px rgba(41, 137, 175, 0.28);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
-      white-space: nowrap;
       width: 100%;
       height: 100%;
       min-height: 56px;
     }
 
+    .mini-button {
+      padding: 10px 12px;
+      background: linear-gradient(135deg, #dff5f6, #cce7f2);
+      color: #12323a;
+      box-shadow: 0 8px 18px rgba(41, 137, 175, 0.14);
+      min-height: 42px;
+    }
+
     .button:hover,
-    .timer-button:hover {
+    .timer-button:hover,
+    .mini-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 14px 28px rgba(41, 137, 175, 0.34);
       filter: brightness(1.03);
     }
 
+    .button:hover,
+    .timer-button:hover {
+      box-shadow: 0 14px 28px rgba(41, 137, 175, 0.34);
+    }
+
     .button:active,
-    .timer-button:active {
+    .timer-button:active,
+    .mini-button:active {
       transform: translateY(0);
     }
 
@@ -257,14 +277,42 @@
       background: linear-gradient(135deg, #f7d9ff, #c5b7ff);
     }
 
+    .memory-button {
+      background: linear-gradient(135deg, #f6e7c7, #eec580);
+      color: #4a3512;
+    }
+
+    .silent-on {
+      background: linear-gradient(135deg, #d9f7e4, #8ed3a5);
+      color: #183826;
+    }
+
+    .silent-off {
+      background: linear-gradient(135deg, #ffe3e3, #f4a3a3);
+      color: #4f1d1d;
+    }
+
+    .insert-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
     .timer-card {
       display: grid;
       gap: 18px;
     }
 
-    .timer-card h2 {
+    .timer-card h2,
+    .mini-section-title {
       margin: 0;
-      font-size: 1.24rem;
+      font-size: 1.14rem;
+      font-weight: 700;
+    }
+
+    .mini-section-title {
+      margin-bottom: 10px;
     }
 
     .timer-visual-layout {
@@ -362,23 +410,56 @@
       gap: 12px;
     }
 
-    .button-row {
+    .button-row,
+    .preset-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
-    .status-box {
+    .preset-row.four {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .status-box,
+    .shortcut-box {
       background: rgba(248, 247, 241, 0.95);
       border: 2px dashed rgba(0, 0, 0, 0.15);
       border-radius: 18px;
       padding: 14px;
-      min-height: 74px;
       line-height: 1.4;
     }
 
-    .flash {
-      animation: pulseAlert 0.9s ease-in-out 3;
+    .status-box {
+      min-height: 74px;
+    }
+
+    .shortcut-box {
+      font-size: 0.95rem;
+    }
+
+    .shortcut-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 12px;
+      margin-top: 8px;
+    }
+
+    .shortcut-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kbd {
+      min-width: 34px;
+      text-align: center;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      box-shadow: inset 0 -1px 0 rgba(0,0,0,0.08);
+      font-weight: 700;
     }
 
     #learningQuestion {
@@ -433,12 +514,17 @@
       padding: 22px;
     }
 
-    body.presentation-mode .timer-controls {
+    body.presentation-mode .timer-controls,
+    body.presentation-mode .shortcut-box,
+    body.presentation-mode .insert-toolbar,
+    body.presentation-mode .preset-wrap {
       display: none;
     }
 
     body.presentation-mode #presentationToggle,
-    body.presentation-mode #fullscreenToggle {
+    body.presentation-mode #fullscreenToggle,
+    body.presentation-mode #silentToggle,
+    body.presentation-mode #resetMemoryButton {
       display: none;
     }
 
@@ -534,6 +620,12 @@
       }
     }
 
+    @media (max-width: 1100px) {
+      .top-toolbar {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
     @media (max-width: 900px) {
       .top-toolbar {
         grid-template-columns: 1fr 1fr;
@@ -550,6 +642,10 @@
 
       .timer-visual-layout {
         grid-template-columns: 1fr 36px;
+      }
+
+      .shortcut-grid {
+        grid-template-columns: 1fr;
       }
 
       #learningQuestion {
@@ -576,6 +672,8 @@
         <button class="button presentation-exit" id="exitPresentationButton" type="button">Exit Presentation</button>
         <button class="button secondary" id="fullscreenToggle" type="button">Enter Full Screen</button>
         <button class="button danger" id="exitFullscreenButton" type="button">Exit Full Screen</button>
+        <button class="button silent-off" id="silentToggle" type="button">Sound On</button>
+        <button class="button memory-button" id="resetMemoryButton" type="button">Reset Memory</button>
       </div>
 
       <div class="date-time-bar" id="dateTimeBar">Tuesday the 14th of April 2026 • 09:00</div>
@@ -599,6 +697,19 @@
           <div class="panel">
             <div class="field">
               <label for="activityInstructions">Activity Instructions</label>
+
+              <div class="insert-toolbar">
+                <button class="mini-button" data-insert="• " type="button">• Bullet</button>
+                <button class="mini-button" data-insert="1. " type="button">1. Step</button>
+                <button class="mini-button" data-insert="\n" type="button">↵ New line</button>
+                <button class="mini-button" data-insert="— " type="button">— Dash</button>
+                <button class="mini-button" data-insert="×" type="button">×</button>
+                <button class="mini-button" data-insert="÷" type="button">÷</button>
+                <button class="mini-button" data-insert="≤" type="button">≤</button>
+                <button class="mini-button" data-insert="≥" type="button">≥</button>
+                <button class="mini-button" data-insert="°" type="button">°</button>
+              </div>
+
               <div class="activity-row">
                 <textarea
                   id="activityInstructions"
@@ -639,6 +750,16 @@
               />
             </div>
 
+            <div class="preset-wrap">
+              <div class="mini-section-title">Quick Presets</div>
+              <div class="preset-row four">
+                <button class="mini-button preset-btn" data-minutes="2" type="button">2m</button>
+                <button class="mini-button preset-btn" data-minutes="5" type="button">5m</button>
+                <button class="mini-button preset-btn" data-minutes="10" type="button">10m</button>
+                <button class="mini-button preset-btn" data-minutes="15" type="button">15m</button>
+              </div>
+            </div>
+
             <div class="button-row">
               <button class="timer-button" id="startTimer" type="button">Start</button>
               <button class="timer-button secondary" id="pauseTimer" type="button">Pause</button>
@@ -653,12 +774,28 @@
           <div class="status-box" id="timerStatus">
             Timer is ready. Set the minutes and press start.
           </div>
+
+          <div class="shortcut-box">
+            <div class="mini-section-title">Shortcut Keys</div>
+            <div class="shortcut-grid">
+              <div class="shortcut-item"><span class="kbd">P</span><span>Presentation mode</span></div>
+              <div class="shortcut-item"><span class="kbd">O</span><span>Exit presentation</span></div>
+              <div class="shortcut-item"><span class="kbd">F</span><span>Enter full screen</span></div>
+              <div class="shortcut-item"><span class="kbd">X</span><span>Exit full screen</span></div>
+              <div class="shortcut-item"><span class="kbd">Space</span><span>Start / Pause timer</span></div>
+              <div class="shortcut-item"><span class="kbd">R</span><span>Reset timer</span></div>
+              <div class="shortcut-item"><span class="kbd">S</span><span>Toggle sound</span></div>
+              <div class="shortcut-item"><span class="kbd">2/5/1</span><span>2, 5, 10 minute presets</span></div>
+            </div>
+          </div>
         </aside>
       </main>
     </div>
   </div>
 
   <script>
+    const STORAGE_KEY = "do_now_app_state_v2";
+
     const learningQuestion = document.getElementById('learningQuestion');
     const activityInstructions = document.getElementById('activityInstructions');
 
@@ -680,7 +817,12 @@
     const exitPresentationButton = document.getElementById('exitPresentationButton');
     const fullscreenToggle = document.getElementById('fullscreenToggle');
     const exitFullscreenButton = document.getElementById('exitFullscreenButton');
+    const silentToggle = document.getElementById('silentToggle');
+    const resetMemoryButton = document.getElementById('resetMemoryButton');
+
     const dateTimeBar = document.getElementById('dateTimeBar');
+    const presetButtons = document.querySelectorAll('.preset-btn');
+    const insertButtons = document.querySelectorAll('[data-insert]');
 
     let totalSeconds = parseInt(minutesInput.value, 10) * 60;
     let remainingSeconds = totalSeconds;
@@ -688,6 +830,62 @@
     let isRunning = false;
     let audioContext = null;
     let beepInterval = null;
+    let isSilent = false;
+    let lastFocusedField = activityInstructions;
+    let oneMinuteWarningPlayed = false;
+    let lastTenSecondPlayed = new Set();
+
+    function saveState() {
+      const state = {
+        learningQuestion: learningQuestion.value,
+        activityInstructions: activityInstructions.value,
+        minutesInput: minutesInput.value,
+        remainingSeconds,
+        totalSeconds,
+        presentationMode: document.body.classList.contains('presentation-mode'),
+        isSilent
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const state = JSON.parse(raw);
+
+        if (typeof state.learningQuestion === 'string') {
+          learningQuestion.value = state.learningQuestion;
+        }
+        if (typeof state.activityInstructions === 'string') {
+          activityInstructions.value = state.activityInstructions;
+        }
+        if (typeof state.minutesInput !== 'undefined') {
+          minutesInput.value = state.minutesInput;
+        }
+        if (typeof state.totalSeconds === 'number' && state.totalSeconds > 0) {
+          totalSeconds = state.totalSeconds;
+        } else {
+          totalSeconds = Math.max(1, parseInt(minutesInput.value, 10) || 5) * 60;
+        }
+        if (typeof state.remainingSeconds === 'number' && state.remainingSeconds >= 0) {
+          remainingSeconds = state.remainingSeconds;
+        } else {
+          remainingSeconds = totalSeconds;
+        }
+        if (state.presentationMode) {
+          document.body.classList.add('presentation-mode');
+        }
+        if (typeof state.isSilent === 'boolean') {
+          isSilent = state.isSilent;
+        }
+      } catch (error) {}
+    }
+
+    function resetMemory() {
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    }
 
     function getOrdinal(day) {
       if (day > 3 && day < 21) return 'th';
@@ -744,16 +942,25 @@
       }
     }
 
+    function updateSilentButton() {
+      silentToggle.textContent = isSilent ? 'Sound Off' : 'Sound On';
+      silentToggle.classList.toggle('silent-on', isSilent);
+      silentToggle.classList.toggle('silent-off', !isSilent);
+    }
+
     function syncTimerFromInput() {
       const minutes = Math.max(1, Math.min(120, parseInt(minutesInput.value, 10) || 5));
       minutesInput.value = minutes;
       totalSeconds = minutes * 60;
       remainingSeconds = totalSeconds;
+      oneMinuteWarningPlayed = false;
+      lastTenSecondPlayed.clear();
       updateDisplay();
       updateTimerBar();
       updateLastThirtyWarning();
       timerStatus.textContent = `Timer set for ${minutes} minute${minutes === 1 ? '' : 's'}.`;
       timerDisplayWrap.classList.remove('flash');
+      saveState();
     }
 
     function stopTimerInterval() {
@@ -763,6 +970,65 @@
       }
       isRunning = false;
       updateLastThirtyWarning();
+    }
+
+    function ensureAudioContext() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+    }
+
+    function playTone(frequency, duration, volume = 0.18, type = 'sine') {
+      if (isSilent) return;
+      ensureAudioContext();
+
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+      gainNode.gain.setValueAtTime(0.0001, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(volume, audioContext.currentTime + 0.01);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + duration);
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + duration + 0.02);
+    }
+
+    function playOneMinuteWarning() {
+      if (isSilent) return;
+      playTone(740, 0.18, 0.12, 'triangle');
+      setTimeout(() => playTone(740, 0.18, 0.12, 'triangle'), 260);
+    }
+
+    function playLastTenTick() {
+      if (isSilent) return;
+      playTone(980, 0.08, 0.10, 'square');
+    }
+
+    function createEndAlarmBeep() {
+      if (isSilent) return;
+      playTone(880, 0.24, 0.2, 'sine');
+    }
+
+    function startBeeping() {
+      stopBeeping();
+      if (isSilent) return;
+      createEndAlarmBeep();
+      beepInterval = setInterval(createEndAlarmBeep, 900);
+    }
+
+    function stopBeeping() {
+      if (beepInterval) {
+        clearInterval(beepInterval);
+        beepInterval = null;
+      }
     }
 
     function startTimer() {
@@ -776,6 +1042,7 @@
       isRunning = true;
       timerStatus.textContent = 'Timer is running.';
       updateLastThirtyWarning();
+      saveState();
 
       timerInterval = setInterval(() => {
         if (remainingSeconds > 0) {
@@ -783,6 +1050,19 @@
           updateDisplay();
           updateTimerBar();
           updateLastThirtyWarning();
+
+          if (remainingSeconds === 60 && !oneMinuteWarningPlayed) {
+            playOneMinuteWarning();
+            oneMinuteWarningPlayed = true;
+            timerStatus.textContent = 'One minute remaining.';
+          }
+
+          if (remainingSeconds <= 10 && remainingSeconds > 0 && !lastTenSecondPlayed.has(remainingSeconds)) {
+            playLastTenTick();
+            lastTenSecondPlayed.add(remainingSeconds);
+          }
+
+          saveState();
         }
 
         if (remainingSeconds <= 0) {
@@ -792,6 +1072,7 @@
           updateTimerBar();
           updateLastThirtyWarning();
           startBeeping();
+          saveState();
         }
       }, 1000);
     }
@@ -800,6 +1081,7 @@
       if (!isRunning) return;
       stopTimerInterval();
       timerStatus.textContent = 'Timer paused.';
+      saveState();
     }
 
     function resetTimer() {
@@ -807,44 +1089,7 @@
       stopBeeping();
       syncTimerFromInput();
       timerStatus.textContent = 'Timer reset.';
-    }
-
-    function createBeep() {
-      if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      }
-
-      if (audioContext.state === 'suspended') {
-        audioContext.resume();
-      }
-
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
-      gainNode.gain.setValueAtTime(0.0001, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
-      gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.28);
-
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-
-      oscillator.start();
-      oscillator.stop(audioContext.currentTime + 0.3);
-    }
-
-    function startBeeping() {
-      stopBeeping();
-      createBeep();
-      beepInterval = setInterval(createBeep, 900);
-    }
-
-    function stopBeeping() {
-      if (beepInterval) {
-        clearInterval(beepInterval);
-        beepInterval = null;
-      }
+      saveState();
     }
 
     function enterPresentationMode() {
@@ -852,6 +1097,7 @@
       updatePresentationButtons();
       autoFitText(learningQuestion, getQuestionConfig());
       autoFitText(activityInstructions, getActivityConfig());
+      saveState();
     }
 
     function exitPresentationMode() {
@@ -859,6 +1105,7 @@
       updatePresentationButtons();
       autoFitText(learningQuestion, getQuestionConfig());
       autoFitText(activityInstructions, getActivityConfig());
+      saveState();
     }
 
     function updatePresentationButtons() {
@@ -920,15 +1167,103 @@
       autoFitText(activityInstructions, getActivityConfig());
     }
 
+    function setFocusedField(field) {
+      lastFocusedField = field;
+    }
+
+    function insertAtCursor(field, text) {
+      field.focus();
+      const start = field.selectionStart ?? field.value.length;
+      const end = field.selectionEnd ?? field.value.length;
+      field.value = field.value.substring(0, start) + text + field.value.substring(end);
+      const newPos = start + text.length;
+      field.selectionStart = newPos;
+      field.selectionEnd = newPos;
+      refreshAutoFit();
+      saveState();
+    }
+
+    function applyPreset(minutes) {
+      minutesInput.value = minutes;
+      syncTimerFromInput();
+      timerStatus.textContent = `Timer preset applied: ${minutes} minute${minutes === 1 ? '' : 's'}.`;
+    }
+
+    function toggleSound() {
+      isSilent = !isSilent;
+      updateSilentButton();
+      saveState();
+      timerStatus.textContent = isSilent ? 'Sound has been turned off.' : 'Sound has been turned on.';
+      if (isSilent) {
+        stopBeeping();
+      }
+    }
+
+    function handleKeyboardShortcuts(event) {
+      const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+      const isTyping = activeTag === 'textarea' || activeTag === 'input';
+
+      if (event.key === ' ' && !isTyping) {
+        event.preventDefault();
+        if (isRunning) {
+          pauseTimer();
+        } else {
+          startTimer();
+        }
+        return;
+      }
+
+      if (isTyping && !event.altKey && !event.ctrlKey && !event.metaKey) {
+        return;
+      }
+
+      const key = event.key.toLowerCase();
+
+      if (key === 'p') enterPresentationMode();
+      if (key === 'o') exitPresentationMode();
+      if (key === 'f') enterFullScreen();
+      if (key === 'x') exitFullScreen();
+      if (key === 'r') resetTimer();
+      if (key === 's') toggleSound();
+      if (key === '2') applyPreset(2);
+      if (key === '5') applyPreset(5);
+      if (key === '1') applyPreset(10);
+    }
+
     minutesInput.addEventListener('input', () => {
       if (!isRunning) {
         syncTimerFromInput();
       }
     });
 
-    learningQuestion.addEventListener('input', refreshAutoFit);
-    activityInstructions.addEventListener('input', refreshAutoFit);
+    learningQuestion.addEventListener('input', () => {
+      refreshAutoFit();
+      saveState();
+    });
+    activityInstructions.addEventListener('input', () => {
+      refreshAutoFit();
+      saveState();
+    });
+
+    learningQuestion.addEventListener('focus', () => setFocusedField(learningQuestion));
+    activityInstructions.addEventListener('focus', () => setFocusedField(activityInstructions));
+
     window.addEventListener('resize', refreshAutoFit);
+    window.addEventListener('keydown', handleKeyboardShortcuts);
+
+    insertButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const value = button.getAttribute('data-insert') || '';
+        const text = value === '\\n' ? '\n' : value;
+        insertAtCursor(lastFocusedField || activityInstructions, text);
+      });
+    });
+
+    presetButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        applyPreset(parseInt(button.dataset.minutes, 10));
+      });
+    });
 
     startTimerButton.addEventListener('click', startTimer);
     pauseTimerButton.addEventListener('click', pauseTimer);
@@ -944,7 +1279,25 @@
     fullscreenToggle.addEventListener('click', enterFullScreen);
     exitFullscreenButton.addEventListener('click', exitFullScreen);
 
+    silentToggle.addEventListener('click', toggleSound);
+    resetMemoryButton.addEventListener('click', resetMemory);
+
     document.addEventListener('fullscreenchange', updateFullscreenButtons);
+
+    loadState();
+    updateSilentButton();
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    updateDisplay();
+    updateTimerBar();
+    updateLastThirtyWarning();
+    updatePresentationButtons();
+    updateFullscreenButtons();
+
+    requestAnimationFrame(() => {
+      refreshAutoFit();
+    });
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -960,6 +1313,7 @@
       function startDictation(targetElement, buttonElement) {
         activeTarget = targetElement;
         activeButton = buttonElement;
+        targetElement.focus();
 
         try {
           recognition.start();
@@ -995,6 +1349,7 @@
         }
 
         refreshAutoFit();
+        saveState();
       });
 
       recognition.addEventListener('end', () => {
@@ -1009,19 +1364,6 @@
       dictateQuestionButton.disabled = true;
       dictateActivityButton.disabled = true;
     }
-
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
-
-    updateDisplay();
-    updateTimerBar();
-    updateLastThirtyWarning();
-    updatePresentationButtons();
-    updateFullscreenButtons();
-
-    requestAnimationFrame(() => {
-      refreshAutoFit();
-    });
   </script>
 </body>
 </html>
