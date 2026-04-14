@@ -118,7 +118,7 @@
       padding: 18px;
       min-height: calc(100vh - 28px);
       display: grid;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: auto 1fr auto auto;
       gap: 14px;
     }
 
@@ -134,19 +134,12 @@
       box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
     }
 
-    .layout {
+    .main-layout {
       display: grid;
-      grid-template-columns: 2.4fr 1fr;
-      gap: 20px;
-      align-items: stretch;
-      min-height: 0;
-    }
-
-    .left-column {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 72px;
       gap: 18px;
       min-height: 0;
+      align-items: stretch;
     }
 
     .panel {
@@ -170,6 +163,7 @@
       margin-bottom: 8px;
     }
 
+    textarea,
     input[type="number"] {
       width: 100%;
       border: 2px solid rgba(0, 0, 0, 0.16);
@@ -182,25 +176,18 @@
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
+    textarea:focus,
+    input[type="number"]:focus {
+      border-color: #2aa7d7;
+      box-shadow: 0 0 0 4px rgba(42, 167, 215, 0.16);
+    }
+
     textarea {
-      width: 100%;
-      border: 2px solid rgba(0, 0, 0, 0.16);
-      border-radius: 16px;
-      background: var(--panel);
-      color: var(--text);
-      padding: 16px 18px;
-      font: inherit;
-      outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
       resize: none;
       overflow: hidden;
       display: block;
-    }
-
-    input[type="number"]:focus,
-    textarea:focus {
-      border-color: #2aa7d7;
-      box-shadow: 0 0 0 4px rgba(42, 167, 215, 0.16);
+      height: 100%;
+      min-height: 100%;
     }
 
     .question-row,
@@ -257,67 +244,20 @@
       color: #ffffff;
     }
 
-    .timer-card {
-      display: grid;
-      grid-template-rows: auto 1fr auto auto auto;
-      gap: 16px;
-      min-height: 0;
-    }
-
-    .timer-card h2,
-    .mini-section-title {
-      margin: 0;
-      font-size: 1.14rem;
+    #learningQuestion {
+      font-size: 2.5rem;
       font-weight: 700;
+      line-height: 1.25;
     }
 
-    .mini-section-title {
-      margin-bottom: 10px;
+    #activityInstructions {
+      font-size: 2.2rem;
+      line-height: 1.45;
     }
 
-    /* Full-height timer visual */
-    .timer-main {
-      display: grid;
-      grid-template-columns: 1fr 70px;
-      gap: 16px;
-      min-height: 0;
-      height: 100%;
-      align-items: stretch;
-    }
-
-    .timer-content {
-      display: grid;
-      grid-template-rows: auto auto auto 1fr;
-      gap: 14px;
-      min-height: 0;
-    }
-
-    .timer-display-wrap {
-      background: var(--panel);
-      border: 2px solid rgba(0, 0, 0, 0.14);
-      border-radius: 22px;
-      padding: 22px;
-      text-align: centre;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .timer-display-wrap.warning-flash {
-      animation: lastThirtyFlash 0.85s ease-in-out infinite;
-    }
-
-    .timer-label {
-      font-size: 0.98rem;
-      color: var(--muted);
-      margin-bottom: 8px;
-      text-align: center;
-    }
-
-    .timer-display {
-      font-size: clamp(2.8rem, 7vw, 5rem);
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      line-height: 1;
-      text-align: center;
+    #learningQuestion::placeholder,
+    #activityInstructions::placeholder {
+      font-size: 1.5rem;
     }
 
     .timer-bar-outer {
@@ -378,20 +318,61 @@
       pointer-events: none;
     }
 
-    .timer-controls {
+    .bottom-timer-panel {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
       display: grid;
-      gap: 12px;
+      grid-template-columns: 1.3fr 1fr 1.3fr;
+      gap: 16px;
+      align-items: centre;
     }
 
-    .button-row,
-    .preset-row {
+    .timer-display-wrap {
+      background: var(--panel);
+      border: 2px solid rgba(0, 0, 0, 0.14);
+      border-radius: 22px;
+      padding: 18px 22px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .timer-display-wrap.warning-flash {
+      animation: lastThirtyFlash 0.85s ease-in-out infinite;
+    }
+
+    .timer-label {
+      font-size: 0.98rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .timer-display {
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+
+    .timer-middle {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-content: center;
+    }
+
+    .preset-row,
+    .button-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 10px;
     }
 
-    .preset-row.four {
-      grid-template-columns: repeat(4, 1fr);
+    .control-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
     }
 
     .status-box {
@@ -401,6 +382,10 @@
       padding: 14px;
       line-height: 1.4;
       min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
 
     .shortcut-bar {
@@ -438,26 +423,6 @@
 
     .flash {
       animation: pulseAlert 0.9s ease-in-out 3;
-    }
-
-    #learningQuestion {
-      font-size: 2.5rem;
-      font-weight: 700;
-      line-height: 1.25;
-      min-height: 100%;
-      height: 100%;
-    }
-
-    #activityInstructions {
-      font-size: 2.2rem;
-      line-height: 1.45;
-      min-height: 100%;
-      height: 100%;
-    }
-
-    #learningQuestion::placeholder,
-    #activityInstructions::placeholder {
-      font-size: 1.5rem;
     }
 
     @keyframes shimmerFlow {
@@ -508,15 +473,27 @@
       .shortcut-bar {
         grid-template-columns: repeat(3, 1fr);
       }
-    }
 
-    @media (max-width: 1050px) {
-      .left-column {
+      .bottom-timer-panel {
         grid-template-columns: 1fr;
       }
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 950px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .timer-bar-outer {
+        min-height: 160px;
+      }
+
+      .shortcut-bar {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 800px) {
       body {
         padding: 8px;
       }
@@ -525,11 +502,7 @@
         min-height: calc(100vh - 16px);
       }
 
-      .top-toolbar {
-        grid-template-columns: 1fr;
-      }
-
-      .layout {
+      .main-layout {
         grid-template-columns: 1fr;
       }
 
@@ -538,11 +511,9 @@
         grid-template-columns: 1fr;
       }
 
-      .timer-main {
-        grid-template-columns: 1fr 36px;
-      }
-
-      .shortcut-bar {
+      .preset-row,
+      .button-row,
+      .control-row {
         grid-template-columns: 1fr 1fr;
       }
 
@@ -561,93 +532,78 @@
     <div class="app-frame">
       <div class="date-time-bar" id="dateTimeBar">Tuesday the 14th of April 2026 • 09:00</div>
 
-      <main class="layout">
-        <section class="left-column">
-          <div class="panel">
-            <div class="field">
-              <label for="learningQuestion">Learning Question</label>
-              <div class="question-row">
-                <textarea
-                  id="learningQuestion"
-                  placeholder="Type the learning question here"
-                  aria-label="Learning question"
-                ></textarea>
-                <button class="button" id="dictateQuestionButton" type="button">🎤 Dictate</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel">
-            <div class="field">
-              <label for="activityInstructions">Activity Instructions</label>
-              <div class="activity-row">
-                <textarea
-                  id="activityInstructions"
-                  placeholder="Type the do now task or activity instructions here"
-                  aria-label="Activity instructions"
-                ></textarea>
-                <button class="button" id="dictateActivityButton" type="button">🎤 Dictate</button>
-              </div>
+      <main class="main-layout">
+        <section class="panel">
+          <div class="field">
+            <label for="learningQuestion">Learning Question</label>
+            <div class="question-row">
+              <textarea
+                id="learningQuestion"
+                placeholder="Type the learning question here"
+                aria-label="Learning question"
+              ></textarea>
+              <button class="button" id="dictateQuestionButton" type="button">🎤 Dictate</button>
             </div>
           </div>
         </section>
 
-        <aside class="panel timer-card">
-          <h2>Timer</h2>
-
-          <div class="timer-main">
-            <div class="timer-content">
-              <div class="timer-display-wrap" id="timerDisplayWrap">
-                <div class="timer-label">Time Remaining</div>
-                <div class="timer-display" id="timerDisplay">05:00</div>
-              </div>
-
-              <div class="timer-controls">
-                <div class="field">
-                  <label for="minutesInput">Minutes</label>
-                  <input
-                    type="number"
-                    id="minutesInput"
-                    min="1"
-                    max="120"
-                    value="5"
-                    aria-label="Timer minutes"
-                  />
-                </div>
-
-                <div>
-                  <div class="mini-section-title">Quick Presets</div>
-                  <div class="preset-row four">
-                    <button class="button secondary preset-btn" data-minutes="2" type="button">2m</button>
-                    <button class="button secondary preset-btn" data-minutes="5" type="button">5m</button>
-                    <button class="button secondary preset-btn" data-minutes="10" type="button">10m</button>
-                    <button class="button secondary preset-btn" data-minutes="15" type="button">15m</button>
-                  </div>
-                </div>
-
-                <div class="button-row">
-                  <button class="timer-button" id="startTimer" type="button">Start</button>
-                  <button class="timer-button secondary" id="pauseTimer" type="button">Pause</button>
-                </div>
-
-                <div class="button-row">
-                  <button class="timer-button secondary" id="resetTimer" type="button">Reset</button>
-                  <button class="timer-button danger" id="stopBeep" type="button">Stop Beep</button>
-                </div>
-              </div>
-
-              <div class="status-box" id="timerStatus">
-                Timer is ready. Set the minutes and press start.
-              </div>
-            </div>
-
-            <div class="timer-bar-outer" aria-hidden="true">
-              <div class="timer-bar-fill" id="timerBarFill"></div>
-              <div class="timer-bar-glass"></div>
+        <section class="panel">
+          <div class="field">
+            <label for="activityInstructions">Activity Instructions</label>
+            <div class="activity-row">
+              <textarea
+                id="activityInstructions"
+                placeholder="Type the do now task or activity instructions here"
+                aria-label="Activity instructions"
+              ></textarea>
+              <button class="button" id="dictateActivityButton" type="button">🎤 Dictate</button>
             </div>
           </div>
+        </section>
+
+        <aside class="timer-bar-outer" aria-hidden="true">
+          <div class="timer-bar-fill" id="timerBarFill"></div>
+          <div class="timer-bar-glass"></div>
         </aside>
       </main>
+
+      <section class="bottom-timer-panel">
+        <div class="timer-display-wrap" id="timerDisplayWrap">
+          <div class="timer-label">Time Remaining</div>
+          <div class="timer-display" id="timerDisplay">05:00</div>
+        </div>
+
+        <div class="timer-middle">
+          <div>
+            <label for="minutesInput">Minutes</label>
+            <input
+              type="number"
+              id="minutesInput"
+              min="1"
+              max="120"
+              value="5"
+              aria-label="Timer minutes"
+            />
+          </div>
+
+          <div class="preset-row">
+            <button class="button secondary preset-btn" data-minutes="2" type="button">2m</button>
+            <button class="button secondary preset-btn" data-minutes="5" type="button">5m</button>
+            <button class="button secondary preset-btn" data-minutes="10" type="button">10m</button>
+            <button class="button secondary preset-btn" data-minutes="15" type="button">15m</button>
+          </div>
+
+          <div class="control-row">
+            <button class="timer-button" id="startTimer" type="button">Start</button>
+            <button class="timer-button secondary" id="pauseTimer" type="button">Pause</button>
+            <button class="timer-button secondary" id="resetTimer" type="button">Reset</button>
+          </div>
+        </div>
+
+        <div class="status-box" id="timerStatus">
+          Timer is ready. Set the minutes and press start.
+        </div>
+      </section>
 
       <div class="shortcut-bar">
         <div class="shortcut-item"><span class="kbd">Space</span><span>Start / Pause</span></div>
@@ -661,7 +617,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "do_now_app_state_v4";
+    const STORAGE_KEY = "do_now_app_state_v5";
 
     const learningQuestion = document.getElementById('learningQuestion');
     const activityInstructions = document.getElementById('activityInstructions');
@@ -678,7 +634,6 @@
     const startTimerButton = document.getElementById('startTimer');
     const pauseTimerButton = document.getElementById('pauseTimer');
     const resetTimerButton = document.getElementById('resetTimer');
-    const stopBeepButton = document.getElementById('stopBeep');
 
     const dateTimeBar = document.getElementById('dateTimeBar');
     const presetButtons = document.querySelectorAll('.preset-btn');
@@ -709,23 +664,11 @@
         if (!raw) return;
         const state = JSON.parse(raw);
 
-        if (typeof state.learningQuestion === 'string') {
-          learningQuestion.value = state.learningQuestion;
-        }
-        if (typeof state.activityInstructions === 'string') {
-          activityInstructions.value = state.activityInstructions;
-        }
-        if (typeof state.minutesInput !== 'undefined') {
-          minutesInput.value = state.minutesInput;
-        }
-        if (typeof state.totalSeconds === 'number' && state.totalSeconds > 0) {
-          totalSeconds = state.totalSeconds;
-        }
-        if (typeof state.remainingSeconds === 'number' && state.remainingSeconds >= 0) {
-          remainingSeconds = state.remainingSeconds;
-        } else {
-          remainingSeconds = totalSeconds;
-        }
+        if (typeof state.learningQuestion === 'string') learningQuestion.value = state.learningQuestion;
+        if (typeof state.activityInstructions === 'string') activityInstructions.value = state.activityInstructions;
+        if (typeof state.minutesInput !== 'undefined') minutesInput.value = state.minutesInput;
+        if (typeof state.totalSeconds === 'number' && state.totalSeconds > 0) totalSeconds = state.totalSeconds;
+        if (typeof state.remainingSeconds === 'number' && state.remainingSeconds >= 0) remainingSeconds = state.remainingSeconds;
       } catch (error) {}
     }
 
@@ -992,6 +935,7 @@
       refreshAutoFit();
       saveState();
     });
+
     activityInstructions.addEventListener('input', () => {
       refreshAutoFit();
       saveState();
@@ -1009,10 +953,6 @@
     startTimerButton.addEventListener('click', startTimer);
     pauseTimerButton.addEventListener('click', pauseTimer);
     resetTimerButton.addEventListener('click', resetTimer);
-    stopBeepButton.addEventListener('click', () => {
-      stopBeeping();
-      timerStatus.textContent = remainingSeconds === 0 ? 'Beep stopped. Time has ended.' : 'Beep stopped.';
-    });
 
     loadState();
     updateDateTime();
